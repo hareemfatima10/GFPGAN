@@ -11,7 +11,7 @@ from gfpgan import GFPGANer
 
 def gfp_inference(input = 'inputs/whole_imgs', output='results', version='1.3', upscale=2,
                  bg_upsampler='realesrgan', bg_tile=400, suffix=None, only_center_face=True, aligned=True,
-                 ext='auto', w=0.5):
+                 ext='auto', weight=0.5):
 
     # ------------------------ input & output ------------------------
     if input.endswith('/'):
