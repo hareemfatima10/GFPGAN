@@ -4,14 +4,16 @@ import glob
 import numpy as np
 import os
 import torch
+import shutil
 from basicsr.utils import imwrite
+
 
 from gfpgan import GFPGANer
 
 
 def gfp_inference(input, output='results', version='1.3', upscale=2,
                  bg_upsampler='realesrgan', bg_tile=400, suffix=None, only_center_face=False, aligned=False,
-                 ext='auto', weight=0.5):
+                 ext='png', weight=0.5):
 
     # ------------------------ input & output ------------------------
     # if input.endswith('/'):
@@ -21,9 +23,10 @@ def gfp_inference(input, output='results', version='1.3', upscale=2,
     # else:
     #     img_list = sorted(glob.glob(os.path.join(input, '*')))
 
-    img_list = input
-
-    os.makedirs(output, exist_ok=True)
+    img_list = [input]
+    if os.path.isdir(output):
+      shutil.rmtree(output)
+    os.mkdir(output)
 
     # ------------------------ set up background upsampler ------------------------
     if bg_upsampler == 'realesrgan':
@@ -99,7 +102,7 @@ def gfp_inference(input, output='results', version='1.3', upscale=2,
         #basename, ext = os.path.splitext(img_name)
         basename = 'output'+str(count)
         count +=1
-        print(f'Processing {input_img} ...')
+        print(f'Processing ...')
         #input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
         # restore faces and background if necessary
@@ -131,17 +134,14 @@ def gfp_inference(input, output='results', version='1.3', upscale=2,
                 extension = ext[1:]
             else:
                 extension = ext
-
             if suffix is not None:
                 save_restore_path = os.path.join(output, 'restored_imgs', f'{basename}_{suffix}.{extension}')
             else:
                 save_restore_path = os.path.join(output, 'restored_imgs', f'{basename}.{extension}')
-            print("hi")
-            print(restored_img)
-            print(save_restore_path)
             imwrite(restored_img, save_restore_path)
 
     print(f'Results are in the [{output}] folder.')
+    return restored_img
 
 
 def main():
@@ -261,7 +261,7 @@ def main():
     for img_path in img_list:
         # read image
         img_name = os.path.basename(img_path)
-        print(f'Processing {img_name} ...')
+        print(f'Processing ...')
         basename, ext = os.path.splitext(img_name)
         input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
