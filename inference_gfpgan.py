@@ -9,17 +9,19 @@ from basicsr.utils import imwrite
 from gfpgan import GFPGANer
 
 
-def gfp_inference(input = 'inputs/whole_imgs', output='results', version='1.3', upscale=2,
+def gfp_inference(input, output='results', version='1.3', upscale=2,
                  bg_upsampler='realesrgan', bg_tile=400, suffix=None, only_center_face=False, aligned=False,
                  ext='auto', weight=0.5):
 
     # ------------------------ input & output ------------------------
-    if input.endswith('/'):
-        input = input[:-1]
-    if os.path.isfile(input):
-        img_list = [input]
-    else:
-        img_list = sorted(glob.glob(os.path.join(input, '*')))
+    # if input.endswith('/'):
+    #     input = input[:-1]
+    # if os.path.isfile(input):
+    #     img_list = [input]
+    # else:
+    #     img_list = sorted(glob.glob(os.path.join(input, '*')))
+
+    img_list = input
 
     os.makedirs(output, exist_ok=True)
 
@@ -90,12 +92,12 @@ def gfp_inference(input = 'inputs/whole_imgs', output='results', version='1.3', 
         bg_upsampler=bg_upsampler)
 
     # ------------------------ restore ------------------------
-    for img_path in img_list:
-        # read image
-        img_name = os.path.basename(img_path)
-        print(f'Processing {img_name} ...')
-        basename, ext = os.path.splitext(img_name)
-        input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    for input_img in img_list:
+        # # read image
+        # img_name = os.path.basename(img_path)
+        #basename, ext = os.path.splitext(img_name)
+        print(f'Processing {input_img} ...')
+        #input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
         # restore faces and background if necessary
         cropped_faces, restored_faces, restored_img = restorer.enhance(
@@ -135,7 +137,7 @@ def gfp_inference(input = 'inputs/whole_imgs', output='results', version='1.3', 
             imwrite(restored_img, save_restore_path)
 
     print(f'Results are in the [{output}] folder.')
-
+    return output_img
 
 def main():
     """Inference demo for GFPGAN (for users).
