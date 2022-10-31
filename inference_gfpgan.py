@@ -92,10 +92,13 @@ def gfp_inference(input, output='results', version='1.3', upscale=2,
         bg_upsampler=bg_upsampler)
 
     # ------------------------ restore ------------------------
+    count = 0
     for input_img in img_list:
         # # read image
         # img_name = os.path.basename(img_path)
         #basename, ext = os.path.splitext(img_name)
+        basename = 'output'+str(count)
+        count +=1
         print(f'Processing {input_img} ...')
         #input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
 
