@@ -126,6 +126,8 @@ def gfp_inference(input, output='results', version='1.3', upscale=2,
             cmp_img = np.concatenate((cropped_face, restored_face), axis=1)
             imwrite(cmp_img, os.path.join(output, 'cmp', f'{basename}_{idx:02d}.png'))
         # save restored img
+        print("hi")
+        print(restored_img)
         if restored_img is not None:
             if ext == 'auto':
                 extension = ext[1:]
